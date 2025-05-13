@@ -1,0 +1,455 @@
+openapi: 3.0.0
+info:
+  title: AkatosferaTest
+  version: 0.0.1
+servers:
+  - url: http://localhost:8000/api_v1/
+    description: local server
+    
+paths:
+  /products:
+    get:
+      summary: Получить список продуктов
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Успешный ответ со списком продуктов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /categories:
+    get: 
+      summary: Получить список категорий с подкатегориями
+      tags:
+        - Categories
+      responses:
+        '200':
+          description: Успешный ответ со списком категорий и их подкаьтегорий
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categories'
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /backets:
+    get: 
+      summary: Получить корзину текущего пользователя
+      tags:
+        - Backets
+      responses:
+        '200':
+          description: Успешный ответ с корзиной
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Backets'
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Добавить продукт в корзину
+      tags:
+        - Backets
+      requestBody:
+        required: True
+        content: 
+          application/json:
+            schema:
+              type: object
+              required:
+              - product
+              - amount
+              properties:
+                product:
+                  type: integer
+                  example: 4
+                amount:
+                  type: integer
+                  example: 10
+      responses:
+        '201':
+          description: Товар успешно добавлен в корзину
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Backets'
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Изменить количество продукта в корзине
+      tags:
+        - Backets
+      requestBody:
+        required: True
+        content: 
+          application/json:
+            schema:
+              type: object
+              required:
+              - product
+              - amount
+              properties:
+                product:
+                  type: integer
+                  example: 4
+                amount:
+                  type: integer
+                  example: 10
+      responses:
+        '200':
+          description: Количество товара в корзине успешно изменено
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Backets'
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Удалить корзину
+      tags:
+        - Backets
+      responses:
+        '204':
+          description: Корзина успешно удалена
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Backets'
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/users:
+    get: 
+      summary: Получить список пользователей
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Успешный ответ со списком пользователей
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        email:
+                          type: string
+                          example: Email@example.com
+                        id:
+                          type: integer
+                          example: 2000
+                        username:
+                          type: string
+                          example: Username
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Создать пользователя
+      tags:
+        - Users
+      requestBody:
+        required: True
+        content: 
+          application/json:
+            schema:
+              type: object
+              required:
+              - username
+              - password
+              properties:
+                product:
+                  type: string
+                  example: Username
+                amount:
+                  type: string
+                  example: Password
+      responses:
+        '200':
+          description: Пользователь успешно создан
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: Username
+                  username:
+                    type: string
+                    example: Password
+                  id:
+                    type: integer
+                    example: 1
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/jwt/create:
+    post:
+      summary: Получить jwt токен
+      tags:
+        - Users
+      requestBody:
+        required: True
+        content: 
+          application/json:
+            schema:
+              type: object
+              required:
+              - username
+              - password
+              properties:
+                product:
+                  type: string
+                  example: Username
+                amount:
+                  type: string
+                  example: Password
+      responses:
+        '200':
+          description: Токен получен
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refresh:
+                    type: string
+                    example: jwt refresh token
+                  access:
+                    type: string
+                    example: jwt access token
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/users/me:
+    get: 
+      summary: Получить текущего пользователя
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Успешный ответ с текущем пользователем
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Изменить параметры текущего пользователя
+      tags:
+        - Users
+      requestBody:
+        required: True
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Успешный ответ с измененным пользователем
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Изменить параметр текущего пользователя
+      tags:
+        - Users
+      requestBody:
+        required: True
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Успешный ответ с измененным пользователем
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        'default':
+          description: Ошибки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          example: Email@example.com
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: Username
+        first_name:
+          type: string
+          example: User first name
+        last_name:
+          type: string
+          example: User last name
+      
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Продукт
+        description:
+          type: string
+          example: Описание продукта
+        slug:
+          type: string
+          example: prodabc
+        image_small:  
+          type: string 
+          example: /media/product_img_small/fa21abb264f3ef5182f392a385855687.jpg
+        image_medium:  
+          type: string 
+          example: /media/product_img_small/fa21abb264f3ef5182f392a385855687.jpg
+        image_large:  
+          type: string 
+          example: /media/product_img_small/fa21abb264f3ef5182f392a385855687.jpg
+        price:
+          type: integer
+          example: 1000
+        subcategory:
+          type: string
+          example: Подкатегория 
+        category: 
+          type: array
+          items:
+            type: string
+            example: Категория
+        
+    Products:
+      type: array
+      items:
+        $ref: '#/components/schemas/Product'
+        
+    Category:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Категория
+        description:
+          type: string
+          example: Описание категории
+        slug:
+          type: string
+          example: category
+        image:  
+          type: string 
+          example: /media/product_img_small/fa21abb264f3ef5182f392a385855687.jpg
+        subcategories: 
+          type: array
+          items:
+            type: string
+            example: Подкатегория
+            
+    Categories:
+      type: array
+      items:
+        $ref: '#/components/schemas/Category'
+    
+    Backets:
+      type: object
+      properties:
+        product: 
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Продукт
+              price:
+                type: integer
+                example: 2000
+              amount:
+                type: integer
+                example: 10
+        total_amount:
+          type: integer
+          example: 10
+        total_price:
+          type: integer
+          example: 1000
+    
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        
+        
+        
+        
+        
+        
+      
+      
